@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+source /venv/bin/activate
+while :; do
+    PUB_IP=$(curl ifconfig.me)
+    A_TARGET=$(linode-cli domains records-view ${DOMAIN_ID} ${RECORD_ID} --text --no-headers --format 'target')
+    echo "Linode Dynamic IP Address Updater"
+    echo "by BeardedTek"
+    echo ""
+    echo "  Current A Record  : $A_TARGET"
+    echo "  Current Public IP : $PUB_IP"
+    if [ ! "$PUB_IP" == "$A_TARGET" ]; then
+        echo "Need to update Target A Record"
+        echo ""
+        linode-cli
+    else
+        echo ""
+        echo "A Record already matches Public IP."
+    fi
+    sleep ${INTERVAL:-30m}
+done

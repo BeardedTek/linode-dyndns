@@ -1,0 +1,8 @@
+[DEFAULT]
+default-user = <YOUR_USERNAME>
+
+[<YOUR_USERNAME>]
+token = YOUR_TOKEN
+region = us-west
+image = linode/ubuntu22.04
+authorized_users = <YOUR_USERNAME>

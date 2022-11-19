@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+
+  linode-dyndns:
+    image: beardedtek/linode-dyndns:latest
+    container_name: linode-dyndns
+    restart: always
+    volumes:
+      - ./.config:/root/.config/linode-cli #STORES LINODE Personal Access Key
+    #  - ./linode-dyndns:/etc/services.d/linode-dyndns # FOR DEVELOPMENT
+    environment:
+      - DOMAIN_ID=${DOMAIN_ID}
+      - RECORD_ID=${RECORD_ID}
+      - INTERVAL=${INTERVAL}
+### NEED TO HAVE A .env FILE WITH THE PRECEEDING ENVIRONMENT VARIALBES
+
+### SETUP:
+###       `docker-compose up -d`
+###       `docker-compose exec linode-dyndns linode-cli config`
+###   This will run you through the process of setting up the linode-cli tool
+### OR:
+###       edit `config/linode-cli` to contain your information
+###       move `config` to `.config`
+###
+###       `docker-compose logs` -f will show the output of the script.
