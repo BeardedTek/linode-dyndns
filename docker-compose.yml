@@ -6,7 +6,7 @@ services:
     container_name: linode-dyndns
     restart: always
     volumes:
-      - ./.config:/root/.config/linode-cli #STORES LINODE Personal Access Key
+      - ./.config:/root/.config #STORES LINODE Personal Access Key
     #  - ./linode-dyndns:/etc/services.d/linode-dyndns # FOR DEVELOPMENT
     environment:
       - DOMAIN_ID=${DOMAIN_ID}
