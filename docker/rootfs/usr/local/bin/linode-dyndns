@@ -1,0 +1,33 @@
+#!/usr/bin/with-contenv bash
+source /venv/bin/activate
+    echo "Linode Dynamic IP Address Updater"
+    echo "by BeardedTek"
+    echo "https://github.com/beardedtek/linode-dyndns"
+    echo ""
+while :; do
+    # Get our public IP
+    PUB_IP=$(curl ifconfig.me)
+    DOMAIN=$(linode-cli domains list | grep ${DOMAIN_ID} | awk '{print $4}')
+    A_TARGET=$(linode-cli domains records-view ${DOMAIN_ID} ${RECORD_ID} --text --no-headers --format 'target')
+
+    echo " Attempting to update ${DOMAIN}"
+    echo "--------------------------------------------"
+    echo " Current A Record  : $A_TARGET"
+    echo " Current Public IP : $PUB_IP"
+
+    if [ ! "$PUB_IP" == "$A_TARGET" ]; then
+        echo "Need to update Target A Record"
+        echo ""
+        linode-cli domains records-update ${DOMAIN_ID} ${RECORD_ID} --target ${PUB_IP}
+        if [ ! $? == 0 ]; then
+          echo "There appears to be a problem.  Maybe check your config?"
+          echo "Trying again in 1 minute."
+        fi
+        sleep 1m
+    else
+        echo ""
+        echo "A Record already matches Public IP."
+        sleep ${INTERVAL:-30m}
+    fi
+    sleep 1
+done
