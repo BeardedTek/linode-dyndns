@@ -7,7 +7,7 @@ services:
     restart: always
     volumes:
       - ./.config:/root/.config #STORES LINODE Personal Access Key
-    #  - ./linode-dyndns:/etc/services.d/linode-dyndns # FOR DEVELOPMENT
+#      - ./linode-dyndns:/etc/services.d/linode-dyndns # FOR DEVELOPMENT
     environment:
       - DOMAIN_ID=${DOMAIN_ID}
       - RECORD_ID=${RECORD_ID}
