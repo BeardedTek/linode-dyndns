@@ -1,23 +1,41 @@
-# LinodeDynamicDns
- 
+# linode-dyndns
 Dynamically Updates Linode Domain A Record
 
+by Beardedtek
+
+https://github.com/beardedtek/linode-dyndns
+
+
 ## SETUP
-### NEED TO HAVE A .env FILE WITH THE FOLLOWING ENVIRONMENT VARIALBES
+
+### docker-compose.yml
+```
+version: '3'
+services:
+
+  linode-dyndns:
+    image: beardedtek/linode-dyndns:latest
+    container_name: linode-dyndns
+    restart: always
+    volumes:
+      - ./.config:/root/.config #STORES LINODE Personal Access Key
+    environment:
+      - DOMAIN_ID=${DOMAIN_ID}
+      - RECORD_ID=${RECORD_ID}
+      - INTERVAL=${INTERVAL}
+```
+
+### Edit .env FILE WITH THE FOLLOWING ENVIRONMENT VARIALBES
     - DOMAIN_ID=${DOMAIN_ID}
     - RECORD_ID=${RECORD_ID}
     - INTERVAL=${INTERVAL}
 
 ### Bring It UP
-    ```docker-compose up -d```
+    `docker-compose up -d`
 
 ## Configure linode-cli
 ### Using built-in utility to walk you through:
-    ```docker-compose exec linode-dyndns linode-cli config```
-    ```docker-compose restart```
-### Manually:
-    edit `config/linode-cli` to contain your information
-    move `config` to `.config`
+    `docker-compose exec linode-dyndns linode-cli config`
 
 ## View Logs
-    ```docker-compose logs -f```
+    `docker-compose logs -f`
