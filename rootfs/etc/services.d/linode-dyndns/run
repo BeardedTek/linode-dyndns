@@ -7,7 +7,6 @@ CONFIGURED=false
 while [ "${CONFIGURED}" == "false" ]; do
 
   while read -r line; do
-    echo "Processing: $line"
     if [ "$line" != *"token"* ]; then
       echo "Good... At least you're not set to defaults!"
       TOKEN=$(cat ${CONF_DIR}/linode-cli | grep token | awk '{print $3}')
