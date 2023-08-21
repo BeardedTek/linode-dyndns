@@ -6,27 +6,28 @@ source /venv/bin/activate
     echo ""
 while :; do
     # Get our public IP
-    PUB_IP=$(curl ifconfig.me)
+    PUB_IP=$(curl -s ifconfig.me)
     DOMAIN=$(linode-cli domains list | grep ${DOMAIN_ID} | awk '{print $4}')
     A_TARGET=$(linode-cli domains records-view ${DOMAIN_ID} ${RECORD_ID} --text --no-headers --format 'target')
 
-    echo " Attempting to update ${DOMAIN}"
-    echo "--------------------------------------------"
-    echo " Current A Record  : $A_TARGET"
-    echo " Current Public IP : $PUB_IP"
+    echo " [INFO ]  Attempting to update ${DOMAIN}"
+    echo " [INFO ]  --------------------------------------------"
+    echo " [INFO ]  Current A Record  : $A_TARGET"
+    echo " [INFO ]  Current Public IP : $PUB_IP"
 
     if [ ! "$PUB_IP" == "$A_TARGET" ]; then
-        echo "Need to update Target A Record"
+        echo " [INFO ]  Out of date: Updating Domain Record"
         echo ""
         linode-cli domains records-update ${DOMAIN_ID} ${RECORD_ID} --target ${PUB_IP}
         if [ ! $? == 0 ]; then
-          echo "There appears to be a problem.  Maybe check your config?"
-          echo "Trying again in 1 minute."
+          echo " [ERROR] There appears to be a problem.  Maybe check your config?"
+          echo " [INFO ]  Trying again in 1 minute."
         fi
         sleep 1m
     else
         echo ""
-        echo "A Record already matches Public IP."
+        echo " [INFO ]  Up to date: No action taken."
+        echo " [INFO ]  Waiting ${INTERVAL:-30m} to check again"
         sleep ${INTERVAL:-30m}
     fi
     sleep 1
